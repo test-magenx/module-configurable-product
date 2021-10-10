@@ -98,7 +98,10 @@
         <actionGroup ref="AdminSetAdvancedPricingActionGroup" stepKey="setAdvancedPricingSecond">
             <argument name="advancedPrice" value="100"/>
         </actionGroup>
-        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProduct">
             <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>

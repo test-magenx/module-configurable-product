@@ -51,7 +51,7 @@
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{BaseConfigurableProduct.urlKey}}"/>
+            <argument name="productUrl" value="{{BaseConfigurableProduct.sku}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "left bar is present at product page with 2 columns" -->

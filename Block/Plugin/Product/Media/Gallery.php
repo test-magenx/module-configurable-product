@@ -56,10 +56,10 @@ class Gallery
      * @param Product $product
      * @return array
      */
-    private function getProductGallery(Product $product): array
+    private function getProductGallery($product)
     {
         $result = [];
-        $images = $this->getImagesOrderedByPosition($product);
+        $images = $product->getMediaGalleryImages();
         foreach ($images as $image) {
             $result[] = [
                 'mediaType' => $image->getMediaType(),
@@ -68,19 +68,5 @@ class Gallery
             ];
         }
         return $result;
-    }
-
-    /**
-     * @param Product $product
-     * @return array
-     */
-    private function getImagesOrderedByPosition(Product $product): array
-    {
-        $imagesCollection = $product->getMediaGalleryImages();
-        $images = $imagesCollection->getItems();
-        usort($images, function ($el1, $el2) {
-            return $el1['position'] <=> $el2['position'];
-        });
-        return $images;
     }
 }

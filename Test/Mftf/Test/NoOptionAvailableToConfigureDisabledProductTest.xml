@@ -121,11 +121,7 @@
             <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForSecondChildProductPageLoad"/>
-
-        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatus">
-            <argument name="stockStatus" value="Out of Stock"/>
-        </actionGroup>
-
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="outOfStockStatus"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
         <!-- Go to created customer page -->
         <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
@@ -158,7 +154,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickToAddProductToOrder"/>
         <waitForPageLoad stepKey="waitForNewOrderPageLoad"/>
-        <see userInput="There are no source items with the in stock status" stepKey="seeTheErrorMessageDisplayed"/>
+        <see userInput="This product is out of stock." stepKey="seeTheErrorMessageDisplayed"/>
 
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderThirdTime">
             <argument name="customer" value="$createCustomer$"/>
