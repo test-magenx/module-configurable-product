@@ -46,9 +46,7 @@ define([
             gallerySwitchStrategy: 'replace',
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: '',
-            selectorProduct: '.product-info-main',
-            selectorProductPrice: '[data-role=priceBox]'
+            tierPriceTemplate: ''
         },
 
         /**
@@ -432,9 +430,7 @@ define([
                 allowedOptions = [],
                 indexKey,
                 allowedProductMinPrice,
-                allowedProductsAllMinPrice,
-                canDisplayOutOfStockProducts = false,
-                filteredSalableProducts;
+                allowedProductsAllMinPrice;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -508,17 +504,11 @@ define([
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
-                        if (this.options.spConfig.canDisplayShowOutOfStockStatus) {
-                            filteredSalableProducts = $(this.options.spConfig.salable[attributeId][options[i].id]).
-                            filter(options[i].allowedProducts);
-                            canDisplayOutOfStockProducts = filteredSalableProducts.length === 0;
-                        }
-
                         if (typeof options[i].price !== 'undefined') {
                             element.options[index].setAttribute('price', options[i].price);
                         }
 
-                        if (allowedProducts.length === 0 || canDisplayOutOfStockProducts) {
+                        if (allowedProducts.length === 0) {
                             element.options[index].disabled = true;
                         }
 
@@ -684,9 +674,7 @@ define([
          * @private
          */
         _displayRegularPriceBlock: function (optionId) {
-            var shouldBeShown = true,
-                $priceBox = this.element.parents(this.options.selectorProduct)
-                    .find(this.options.selectorProductPrice);
+            var shouldBeShown = true;
 
             _.each(this.options.settings, function (element) {
                 if (element.value === '') {
@@ -706,8 +694,7 @@ define([
             $(document).trigger('updateMsrpPriceBlock',
                 [
                     optionId,
-                    this.options.spConfig.optionPrices,
-                    $priceBox
+                    this.options.spConfig.optionPrices
                 ]
             );
         },

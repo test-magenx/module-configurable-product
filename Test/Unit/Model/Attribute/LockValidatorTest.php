@@ -47,9 +47,6 @@ class LockValidatorTest extends TestCase
      */
     private $metadataPoolMock;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
@@ -59,12 +56,12 @@ class LockValidatorTest extends TestCase
             ->getMock();
 
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->onlyMethods(['select', 'fetchOne'])
+            ->setMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->select = $this->getMockBuilder(Select::class)
-            ->onlyMethods(['reset', 'from', 'join', 'where', 'group', 'limit'])
+            ->setMethods(['reset', 'from', 'join', 'where', 'group', 'limit'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -79,7 +76,9 @@ class LockValidatorTest extends TestCase
 
         $this->model = $helper->getObject(
             LockValidator::class,
-            ['resource' => $this->resource]
+            [
+                'resource' => $this->resource
+            ]
         );
         $refClass = new \ReflectionClass(LockValidator::class);
         $refProperty = $refClass->getProperty('metadataPool');
@@ -87,10 +86,7 @@ class LockValidatorTest extends TestCase
         $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
-    /**
-     * @return void
-     */
-    public function testValidate(): void
+    public function testValidate()
     {
         $this->validate(false);
     }
@@ -98,7 +94,7 @@ class LockValidatorTest extends TestCase
     /**
      * @return EntityMetadata|MockObject
      */
-    private function getMetaDataMock(): EntityMetadata
+    private function getMetaDataMock()
     {
         $metadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
@@ -111,10 +107,7 @@ class LockValidatorTest extends TestCase
         return $metadata;
     }
 
-    /**
-     * @return void
-     */
-    public function testValidateException(): void
+    public function testValidateException()
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('This attribute is used in configurable products.');
@@ -123,11 +116,9 @@ class LockValidatorTest extends TestCase
 
     /**
      * @param $exception
-     *
-     * @return void
      * @throws LocalizedException
      */
-    public function validate($exception): void
+    public function validate($exception)
     {
         $attrTable = 'someAttributeTable';
         $productTable = 'someProductTable';
@@ -138,17 +129,19 @@ class LockValidatorTest extends TestCase
 
         /** @var AbstractModel|MockObject $object */
         $object = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(['getAttributeId'])
+            ->setMethods(['getAttributeId'])
             ->disableOriginalConstructor()
             ->getMock();
         $object->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
 
         $this->resource->expects($this->once())->method('getConnection')
             ->willReturn($this->connectionMock);
-        $this->resource
-            ->method('getTableName')
-            ->withConsecutive(['catalog_product_super_attribute'], ['catalog_product_entity'])
-            ->willReturnOnConsecutiveCalls($attrTable, $productTable);
+        $this->resource->expects($this->at(1))->method('getTableName')
+            ->with('catalog_product_super_attribute')
+            ->willReturn($attrTable);
+        $this->resource->expects($this->at(2))->method('getTableName')
+            ->with('catalog_product_entity')
+            ->willReturn($productTable);
 
         $this->connectionMock->expects($this->once())->method('select')
             ->willReturn($this->select);

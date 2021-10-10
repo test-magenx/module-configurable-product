@@ -435,8 +435,6 @@ class ConfigurableTest extends TestCase
             'chooseText' => __('Choose an Option...'),
             'images' => [],
             'index' => [],
-            'salable' => [],
-            'canDisplayShowOutOfStockStatus' => false
         ];
 
         return $expectedArray;
